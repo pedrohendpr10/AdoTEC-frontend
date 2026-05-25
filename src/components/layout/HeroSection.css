@@ -1,0 +1,157 @@
+/* ============================================================
+   HeroSection — Estilo editorial com foto full-bleed
+   ============================================================ */
+
+.hero-section {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+
+  /* Imagem de fundo (valor via inline style) */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Garante que a foto não carregue com "pulo" branco */
+  background-color: var(--color-primary-dark);
+
+  overflow: hidden;
+}
+
+/* ── Overlay em gradiente ───────────────────────────────────── */
+.hero-section__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(0, 40, 30, 0.82) 0%,
+    rgba(0, 40, 30, 0.68) 40%,
+    rgba(0, 0, 0, 0.30) 100%
+  );
+  z-index: 1;
+}
+
+/* ── Conteúdo sobre a imagem ────────────────────────────────── */
+.hero-section__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 80px 60px;
+}
+
+/* ── Título ──────────────────────────────────────────────────── */
+.hero-section__title {
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: var(--space-4);
+  max-width: 580px;
+
+  /* Animação sutil de entrada */
+  animation: hero-fade-up 0.7s ease both;
+}
+
+.hero-section__title em {
+  color: var(--color-accent);
+  font-style: normal;
+}
+
+/* ── Subtítulo ───────────────────────────────────────────────── */
+.hero-section__subtitle {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: var(--font-size-lg);
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: var(--space-6);
+
+  animation: hero-fade-up 0.7s 0.15s ease both;
+}
+
+/* ── Botões ───────────────────────────────────────────────────── */
+.hero-section__actions {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+
+  animation: hero-fade-up 0.7s 0.3s ease both;
+}
+
+.hero-section__btn-secondary {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(4px);
+}
+
+.hero-section__btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #fff !important;
+}
+
+/* ── Animação de entrada ─────────────────────────────────────── */
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   Responsivo
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 860px) {
+  .hero-section {
+    min-height: 480px;
+  }
+
+  .hero-section__content {
+    padding: 60px 40px;
+  }
+
+  .hero-section__title {
+    max-width: 100%;
+  }
+
+  .hero-section__subtitle {
+    max-width: 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .hero-section {
+    min-height: 420px;
+  }
+
+  .hero-section__content {
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .hero-section__overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 40, 30, 0.78) 0%,
+      rgba(0, 40, 30, 0.60) 60%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+  }
+
+  .hero-section__title,
+  .hero-section__subtitle {
+    max-width: 100%;
+  }
+
+  .hero-section__actions {
+    justify-content: center;
+  }
+}

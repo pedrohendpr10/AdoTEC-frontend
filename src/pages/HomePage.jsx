@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import PetCard from '../components/pets/PetCard';
+import HeroSection from '../components/layout/HeroSection';
 import { PageSpinner } from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
-import { getPets } from '../api/petsApi';
+import { getDestaquePets } from '../api/petsApi';
 
 /** Página inicial: hero, como funciona e uma prévia de pets. */
 export default function HomePage() {
@@ -12,8 +13,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getPets({ page: 0 })
-      .then((data) => setPets((data.content ?? []).slice(0, 4)))
+    getDestaquePets()
+      .then((data) => setPets(data ?? []))
       .catch(() => setPets([]))
       .finally(() => setLoading(false));
   }, []);
@@ -21,34 +22,13 @@ export default function HomePage() {
   return (
     <>
       {/* ===== Hero ===== */}
-      <section className="hero">
-        <div className="container hero__inner">
-          <div>
-            <h1 className="hero__title">
-              Encontre o seu novo <em>melhor amigo</em>
-            </h1>
-            <p className="hero__text">
-              O AdoTEC conecta você aos animais do Centro de Zoonoses que estão
-              à espera de um lar. Conheça, agende uma visita e mude duas vidas.
-            </p>
-            <div className="row">
-              <Link to="/pets">
-                <Button variant="accent" size="lg">
-                  Quero adotar 🐾
-                </Button>
-              </Link>
-              <Link to="/cadastro">
-                <Button variant="outline" size="lg" style={{ color: '#fff', borderColor: '#fff' }}>
-                  Criar conta
-                </Button>
-              </Link>
-            </div>
-          </div>
-          <div className="hero__art" aria-hidden="true">
-            🐕
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        heroImage="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600"
+        title={<>Encontre o seu novo <em>melhor amigo</em></>}
+        subtitle="O AdoTEC conecta você aos animais do Centro de Zoonoses que estão à espera de um lar. Conheça, agende uma visita e mude duas vidas."
+        primaryLabel="Quero adotar 🐾"
+        secondaryLabel="Criar conta"
+      />
 
       {/* ===== Como funciona ===== */}
       <section className="section">

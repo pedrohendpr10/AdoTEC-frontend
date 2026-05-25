@@ -20,6 +20,11 @@ export function getPetById(id) {
   return client.get(`/pets/${id}`).then((res) => res.data.data);
 }
 
+/** GET /pets/destaque → [PetResponseDTO] (top 4, cacheado no Redis) */
+export function getDestaquePets() {
+  return client.get('/pets/destaque').then((res) => res.data.data);
+}
+
 /** GET /pets/{petId}/photos → [PetPhotoResponseDTO] */
 export function getPetPhotos(petId) {
   return client.get(`/pets/${petId}/photos`).then((res) => res.data.data);

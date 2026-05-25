@@ -576,46 +576,8 @@ p {
 }
 
 /* ===================== Hero ===================== */
-.hero {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary-dark),
-    var(--color-primary)
-  );
-  color: #fff;
-  padding: var(--space-8) 0;
-}
+/* Estilos movidos para components/layout/HeroSection.css */
 
-.hero__inner {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: var(--space-6);
-  align-items: center;
-}
-
-.hero__title {
-  color: #fff;
-  font-size: var(--font-size-hero);
-  font-weight: 800;
-  margin-bottom: var(--space-4);
-}
-
-.hero__title em {
-  color: var(--color-accent);
-  font-style: normal;
-}
-
-.hero__text {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--space-5);
-}
-
-.hero__art {
-  font-size: 11rem;
-  text-align: center;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
-}
 
 /* ===================== Home — passos ===================== */
 .steps {
@@ -935,21 +897,14 @@ p {
 
 /* ===================== Responsivo ===================== */
 @media (max-width: 860px) {
-  .hero__inner,
   .pet-detail {
     grid-template-columns: 1fr;
-  }
-  .hero__art {
-    display: none;
   }
   .steps {
     grid-template-columns: 1fr;
   }
   h1 {
     font-size: var(--font-size-2xl);
-  }
-  .hero__title {
-    font-size: var(--font-size-3xl);
   }
 }
 
