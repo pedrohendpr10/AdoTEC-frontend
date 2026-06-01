@@ -6,9 +6,10 @@ import { useAuth } from '../../context/AuthContext';
  *
  * - Sem login → redireciona para /login, guardando a rota de origem
  *   para retornar após autenticar.
- * - Com `role` informada, exige que o usuário a possua.
+ * - `role`  : exige uma role específica.
+ * - `roles` : aceita qualquer uma das roles informadas (any-of).
  */
-export default function ProtectedRoute({ role, children }) {
+export default function ProtectedRoute({ role, roles, children }) {
   const { isAuthenticated, hasRole } = useAuth();
   const location = useLocation();
 
@@ -17,6 +18,10 @@ export default function ProtectedRoute({ role, children }) {
   }
 
   if (role && !hasRole(role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (roles && !roles.some((r) => hasRole(r))) {
     return <Navigate to="/" replace />;
   }
 

@@ -15,7 +15,7 @@ export default function LoginPage() {
   const location = useLocation();
 
   // Rota para onde voltar após autenticar (definida por ProtectedRoute).
-  const from = location.state?.from?.pathname ?? '/';
+  const fromOrigin = location.state?.from?.pathname;
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
@@ -32,9 +32,15 @@ export default function LoginPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(form.email, form.password);
+      const data = await login(form.email, form.password);
       toast.success('Bem-vindo(a) de volta!');
-      navigate(from, { replace: true });
+
+      // Sem rota de origem: staff vai pro painel; adotantes pra home.
+      const roles = data?.roles ?? [];
+      const isStaff =
+        roles.includes('ROLE_ADMIN') || roles.includes('ROLE_EMPLOYEE');
+      const target = fromOrigin ?? (isStaff ? '/painel' : '/');
+      navigate(target, { replace: true });
     } catch (err) {
       const parsed = parseApiError(err);
       if (parsed.status === 429) {

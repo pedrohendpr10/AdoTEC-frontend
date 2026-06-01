@@ -10,24 +10,36 @@ import RegisterPage from './pages/RegisterPage';
 import MyAppointmentsPage from './pages/MyAppointmentsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
+// Área administrativa
+import AdminLayout from './components/admin/AdminLayout';
+import DashboardPage from './pages/admin/DashboardPage';
+import PetsAdminPage from './pages/admin/PetsAdminPage';
+import PetFormPage from './pages/admin/PetFormPage';
+import PetPhotosPage from './pages/admin/PetPhotosPage';
+import AppointmentsAdminPage from './pages/admin/AppointmentsAdminPage';
+import AppointmentDetailPage from './pages/admin/AppointmentDetailPage';
+import EmployeesPage from './pages/admin/EmployeesPage';
+
+const STAFF_ROLES = ['ROLE_ADMIN', 'ROLE_EMPLOYEE'];
+
 /**
  * Mapa de rotas do AdoTEC.
  *
- * Públicas:    /, /pets, /pets/:id, /login, /cadastro
- * Protegidas:  /meus-agendamentos (exige login)
+ * Públicas:        /, /pets, /pets/:id, /login, /cadastro
+ * Adotante:        /meus-agendamentos
+ * Painel (staff):  /painel, /painel/pets/*, /painel/agendamentos/*
+ * Admin-only:      /painel/funcionarios
  */
 export default function App() {
   return (
     <Routes>
+      {/* ===== Site público + adotante ===== */}
       <Route element={<Layout />}>
-        {/* Públicas */}
         <Route path="/" element={<HomePage />} />
         <Route path="/pets" element={<CatalogPage />} />
         <Route path="/pets/:id" element={<PetDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cadastro" element={<RegisterPage />} />
-
-        {/* Protegidas */}
         <Route
           path="/meus-agendamentos"
           element={
@@ -36,9 +48,39 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
+      </Route>
+
+      {/* ===== Painel administrativo ===== */}
+      <Route
+        path="/painel"
+        element={
+          <ProtectedRoute roles={STAFF_ROLES}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<DashboardPage />} />
+
+        {/* Pets */}
+        <Route path="pets" element={<PetsAdminPage />} />
+        <Route path="pets/novo" element={<PetFormPage />} />
+        <Route path="pets/:id/editar" element={<PetFormPage />} />
+        <Route path="pets/:id/fotos" element={<PetPhotosPage />} />
+
+        {/* Agendamentos */}
+        <Route path="agendamentos" element={<AppointmentsAdminPage />} />
+        <Route path="agendamentos/:id" element={<AppointmentDetailPage />} />
+
+        {/* Apenas ADMIN — proteção extra dentro da rota */}
+        <Route
+          path="funcionarios"
+          element={
+            <ProtectedRoute role="ROLE_ADMIN">
+              <EmployeesPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );

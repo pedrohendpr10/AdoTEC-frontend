@@ -5,7 +5,8 @@ import Button from '../ui/Button';
 
 /** Barra de navegação principal (fixa no topo). */
 export default function Navbar() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isAdmin, isEmployee } = useAuth();
+  const isStaff = isAdmin || isEmployee;
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -40,6 +41,11 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <div className="navbar__user">
+              {isStaff && (
+                <NavLink to="/painel" className={linkClass}>
+                  Painel
+                </NavLink>
+              )}
               <NavLink to="/meus-agendamentos" className={linkClass}>
                 Meus agendamentos
               </NavLink>
