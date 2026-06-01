@@ -18,7 +18,7 @@ export default function HeroSection({
   title,
   subtitle,
   primaryLabel = 'Quero adotar 🐾',
-  secondaryLabel = 'Criar conta',
+  secondaryLabel = null,
   primaryTo = '/pets',
   secondaryTo = '/cadastro',
 }) {
@@ -41,15 +41,17 @@ export default function HeroSection({
               {primaryLabel}
             </Button>
           </Link>
-          <Link to={secondaryTo}>
-            <Button
-              variant="outline"
-              size="lg"
-              className="hero-section__btn-secondary"
-            >
-              {secondaryLabel}
-            </Button>
-          </Link>
+          {secondaryLabel && (
+            <Link to={secondaryTo}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="hero-section__btn-secondary"
+              >
+                {secondaryLabel}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </section>

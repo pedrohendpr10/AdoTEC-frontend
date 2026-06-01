@@ -6,9 +6,11 @@ import HeroSection from '../components/layout/HeroSection';
 import { PageSpinner } from '../components/ui/Spinner';
 import EmptyState from '../components/ui/EmptyState';
 import { getDestaquePets } from '../api/petsApi';
+import { useAuth } from '../context/AuthContext';
 
 /** Página inicial: hero, como funciona e uma prévia de pets. */
 export default function HomePage() {
+  const { isAuthenticated } = useAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,7 +29,7 @@ export default function HomePage() {
         title={<>Encontre o seu novo <em>melhor amigo</em></>}
         subtitle="O AdoTEC conecta você aos animais do Centro de Zoonoses que estão à espera de um lar. Conheça, agende uma visita e mude duas vidas."
         primaryLabel="Quero adotar 🐾"
-        secondaryLabel="Criar conta"
+        secondaryLabel={!isAuthenticated ? 'Criar conta' : null}
       />
 
       {/* ===== Como funciona ===== */}
