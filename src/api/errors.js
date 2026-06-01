@@ -28,6 +28,9 @@ const TRANSLATIONS = {
   'Maximum limit of': 'Limite de fotos por pet atingido.',
   'Invalid file type': 'Formato de arquivo inválido. Use JPEG, PNG ou WebP.',
   'File size exceeds': 'A imagem excede o limite de 5 MB.',
+  // DataIntegrityViolation messages (already in PT-BR, pass through)
+  'A operação conflita com o estado atual dos dados.':
+    'A operação conflita com o estado atual dos dados.',
 };
 
 function translate(detail) {
