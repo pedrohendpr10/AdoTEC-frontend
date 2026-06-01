@@ -3,7 +3,7 @@ import client from './client';
 /**
  * Endpoints de horários disponíveis para visita.
  * Retornam listas planas (sem paginação) de TimeSlotResponseDTO:
- *   { id, date, startTime, endTime }
+ *   { slotId, date, startTime, endTime, vagasRestantes }
  */
 
 /** GET /timeslots?date=YYYY-MM-DD */

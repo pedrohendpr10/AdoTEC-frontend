@@ -60,7 +60,7 @@ export default function ScheduleModal({ open, onClose, pet, onScheduled }) {
     setSubmitting(true);
     setError(null);
     try {
-      await createAppointment(pet.petId, selectedSlot.id);
+      await createAppointment(pet.petId, selectedSlot.slotId);
       toast.success(`Visita a ${pet.petName} agendada com sucesso!`);
       reset();
       onScheduled?.();
@@ -120,10 +120,10 @@ export default function ScheduleModal({ open, onClose, pet, onScheduled }) {
             <div className="timeslot-grid">
               {slots.map((slot) => (
                 <button
-                  key={slot.id}
+                  key={slot.slotId}
                   type="button"
                   className={`chip ${
-                    selectedSlot?.id === slot.id ? 'chip--active' : ''
+                    selectedSlot?.slotId === slot.slotId ? 'chip--active' : ''
                   }`}
                   onClick={() => setSelectedSlot(slot)}
                 >
