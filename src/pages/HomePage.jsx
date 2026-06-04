@@ -10,7 +10,8 @@ import { useAuth } from '../context/AuthContext';
 
 /** Página inicial: hero, como funciona e uma prévia de pets. */
 export default function HomePage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isEmployee, isAdmin } = useAuth();
+  const isStaff = isEmployee || isAdmin;
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,43 +29,46 @@ export default function HomePage() {
         heroImage="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600"
         title={<>Encontre o seu novo <em>melhor amigo</em></>}
         subtitle="O AdoTEC conecta você aos animais do Centro de Zoonoses que estão à espera de um lar. Conheça, agende uma visita e mude duas vidas."
-        primaryLabel="Quero adotar 🐾"
+        primaryLabel={isStaff ? 'Acessar painel' : 'Quero adotar 🐾'}
+        primaryTo={isStaff ? '/painel' : '/pets'}
         secondaryLabel={!isAuthenticated ? 'Criar conta' : null}
       />
 
-      {/* ===== Como funciona ===== */}
-      <section className="section">
-        <div className="container">
-          <h2 className="section-title">Como funciona</h2>
-          <p className="section-subtitle">Adotar é simples e leva poucos passos</p>
-          <div className="steps">
-            <div className="card step">
-              <div className="step__num">1</div>
-              <h3 className="step__title">Escolha</h3>
-              <p className="muted">
-                Navegue pelo catálogo e conheça os animais disponíveis para
-                adoção.
-              </p>
-            </div>
-            <div className="card step">
-              <div className="step__num">2</div>
-              <h3 className="step__title">Agende</h3>
-              <p className="muted">
-                Marque uma visita em um dos horários disponíveis para conhecer o
-                pet pessoalmente.
-              </p>
-            </div>
-            <div className="card step">
-              <div className="step__num">3</div>
-              <h3 className="step__title">Adote</h3>
-              <p className="muted">
-                Compareça à visita e, se for um match, leve seu novo amigo para
-                casa.
-              </p>
+      {/* ===== Como funciona (apenas para adotantes/visitantes) ===== */}
+      {!isStaff && (
+        <section className="section">
+          <div className="container">
+            <h2 className="section-title">Como funciona</h2>
+            <p className="section-subtitle">Adotar é simples e leva poucos passos</p>
+            <div className="steps">
+              <div className="card step">
+                <div className="step__num">1</div>
+                <h3 className="step__title">Escolha</h3>
+                <p className="muted">
+                  Navegue pelo catálogo e conheça os animais disponíveis para
+                  adoção.
+                </p>
+              </div>
+              <div className="card step">
+                <div className="step__num">2</div>
+                <h3 className="step__title">Agende</h3>
+                <p className="muted">
+                  Marque uma visita em um dos horários disponíveis para conhecer o
+                  pet pessoalmente.
+                </p>
+              </div>
+              <div className="card step">
+                <div className="step__num">3</div>
+                <h3 className="step__title">Adote</h3>
+                <p className="muted">
+                  Compareça à visita e, se for um match, leve seu novo amigo para
+                  casa.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== Prévia de pets ===== */}
       <section className="section" style={{ paddingTop: 0 }}>

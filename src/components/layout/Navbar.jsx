@@ -5,7 +5,7 @@ import Button from '../ui/Button';
 
 /** Barra de navegação principal (fixa no topo). */
 export default function Navbar() {
-  const { isAuthenticated, user, logout, isAdmin, isEmployee } = useAuth();
+  const { isAuthenticated, user, logout, isAdmin, isEmployee, isAdopter } = useAuth();
   const isStaff = isAdmin || isEmployee;
   const toast = useToast();
   const navigate = useNavigate();
@@ -46,9 +46,11 @@ export default function Navbar() {
                   Painel
                 </NavLink>
               )}
-              <NavLink to="/meus-agendamentos" className={linkClass}>
-                Meus agendamentos
-              </NavLink>
+              {isAdopter && (
+                <NavLink to="/meus-agendamentos" className={linkClass}>
+                  Meus agendamentos
+                </NavLink>
+              )}
               <span className="navbar__user-name">Olá, {user.name.split(' ')[0]}</span>
               <Button variant="accent" size="sm" onClick={handleLogout}>
                 Sair

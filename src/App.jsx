@@ -43,7 +43,7 @@ export default function App() {
         <Route
           path="/meus-agendamentos"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute role="ROLE_ADOPTER">
               <MyAppointmentsPage />
             </ProtectedRoute>
           }

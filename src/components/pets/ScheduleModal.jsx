@@ -9,14 +9,23 @@ import { createAppointment } from '../../api/appointmentsApi';
 import { parseApiError } from '../../api/errors';
 import { formatTime, todayISO } from '../../utils/format';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Modal de agendamento de visita.
  *
  * Fluxo: o adotante escolhe uma data → buscamos os horários disponíveis
  * daquele dia → ele seleciona um horário → confirmamos o agendamento.
+ *
+ * Proteção: apenas usuários com ROLE_ADOPTER podem abrir este modal.
+ * Mesmo que o prop `open` seja forçado via DOM, o componente não renderiza
+ * para outros perfis.
  */
 export default function ScheduleModal({ open, onClose, pet, onScheduled }) {
+  const { isAdopter } = useAuth();
+
+  // Proteção explícita: funcionários e admins nunca veem o modal.
+  if (!isAdopter) return null;
   const toast = useToast();
   const [date, setDate] = useState('');
   const [slots, setSlots] = useState([]);

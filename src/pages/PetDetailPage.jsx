@@ -43,6 +43,8 @@ export default function PetDetailPage() {
       navigate('/login', { state: { from: { pathname: `/pets/${id}` } } });
       return;
     }
+    // Proteção: funcionários não podem abrir o modal de agendamento.
+    if (!isAdopter) return;
     setScheduleOpen(true);
   };
 

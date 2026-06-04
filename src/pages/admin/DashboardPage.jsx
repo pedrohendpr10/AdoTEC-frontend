@@ -8,6 +8,7 @@ import {
   getAllAppointments,
   getMyAppointments,
 } from '../../api/appointmentsApi';
+import { getEmployees } from '../../api/employeesApi';
 import { useAuth } from '../../context/AuthContext';
 import { todayISO } from '../../utils/format';
 
@@ -25,6 +26,7 @@ export default function DashboardPage() {
     appointmentsTotal: 0,
     pendingToday: 0,
     pendingTotal: 0,
+    employeesTotal: 0,
   });
 
   useEffect(() => {
@@ -47,11 +49,21 @@ export default function DashboardPage() {
         ).length;
         const pendingTotal = items.filter((a) => a.status === 'PENDING').length;
 
+        // Funcionários: apenas ADMIN busca essa informação.
+        let employeesTotal = 0;
+        if (isAdmin) {
+          try {
+            const empList = await getEmployees();
+            employeesTotal = empList?.length ?? 0;
+          } catch { /* ignora se falhar */ }
+        }
+
         setStats({
           petsTotal: petsPage.pagination?.totalElements ?? 0,
           appointmentsTotal: apptPage.pagination?.totalElements ?? 0,
           pendingToday,
           pendingTotal,
+          employeesTotal,
         });
       } finally {
         setLoading(false);
@@ -81,6 +93,14 @@ export default function DashboardPage() {
       </header>
 
       <div className="stat-grid">
+        {isAdmin && (
+          <StatCard
+            icon="👥"
+            value={stats.employeesTotal}
+            label="Funcionários"
+            accent="primary"
+          />
+        )}
         <StatCard
           icon="🐾"
           value={stats.petsTotal}
