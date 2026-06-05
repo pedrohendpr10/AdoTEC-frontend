@@ -20,16 +20,33 @@ export function createAppointment(petId, timeSlotId) {
  *   ADOPTER  → agendamentos onde é o adotante
  *   EMPLOYEE → agendamentos onde está atribuído
  */
-export function getMyAppointments({ page = 0, size = 10 } = {}) {
+export function getMyAppointments({ status, showCanceled, sort, page = 0, size = 10 } = {}) {
+  const params = { page, size };
+  if (status) params.status = status;
+  if (showCanceled !== undefined) params.showCanceled = showCanceled;
+  if (sort) params.sort = sort;
   return client
-    .get('/appointments/me', { params: { page, size } })
+    .get('/appointments/me', { params })
     .then((res) => res.data.data);
 }
 
 /** GET /appointments?page=&size= → { content, pagination }  (apenas ADMIN) */
-export function getAllAppointments({ page = 0, size = 10 } = {}) {
+export function getAllAppointments({ status, employeeId, unassigned, showCanceled, sort, page = 0, size = 10 } = {}) {
+  const params = { page, size };
+  if (status) params.status = status;
+  if (employeeId) params.employeeId = employeeId;
+  if (unassigned) params.unassigned = unassigned;
+  if (showCanceled !== undefined) params.showCanceled = showCanceled;
+  if (sort) params.sort = sort;
   return client
-    .get('/appointments', { params: { page, size } })
+    .get('/appointments', { params })
+    .then((res) => res.data.data);
+}
+
+/** GET /dashboard/unassigned-appointments?page=&size= → { content, pagination } (apenas ADMIN) */
+export function getUnassignedAppointments({ page = 0, size = 5 } = {}) {
+  return client
+    .get('/dashboard/unassigned-appointments', { params: { page, size } })
     .then((res) => res.data.data);
 }
 

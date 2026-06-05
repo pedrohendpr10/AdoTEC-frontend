@@ -37,6 +37,38 @@ export const PET_SIZES = [
   { value: 'BIG', label: 'Grande' },
 ];
 
+/** PetGender (MALE | FEMALE) → rótulo PT-BR */
+export function petGenderLabel(gender) {
+  return { MALE: 'Macho', FEMALE: 'Fêmea' }[gender] ?? gender;
+}
+
+export const PET_GENDERS = [
+  { value: 'MALE', label: 'Macho' },
+  { value: 'FEMALE', label: 'Fêmea' },
+];
+
+export const PET_SPECIES = [
+  { value: 'Cachorro', label: 'Cachorro' },
+  { value: 'Gato', label: 'Gato' },
+  { value: 'Coelho', label: 'Coelho' },
+];
+
+export const AGE_RANGES = [
+  { value: '', label: 'Todos' },
+  { value: '0-12', label: 'Filhote (0-12 meses)', minAge: 0, maxAge: 12 },
+  { value: '13-36', label: 'Jovem (13-36 meses)', minAge: 13, maxAge: 36 },
+  { value: '37+', label: 'Adulto (37+ meses)', minAge: 37, maxAge: null },
+];
+
+export const SORT_OPTIONS = [
+  { value: 'createdAt,desc', label: 'Mais recentes' },
+  { value: 'createdAt,asc', label: 'Mais antigos' },
+  { value: 'petName,asc', label: 'Nome A-Z' },
+  { value: 'petName,desc', label: 'Nome Z-A' },
+  { value: 'ageInMonths,asc', label: 'Menor idade' },
+  { value: 'ageInMonths,desc', label: 'Maior idade' },
+];
+
 /** AppointmentStatus → { label, variant } para exibição com Badge */
 export function appointmentStatus(status) {
   const map = {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import Alert from '../ui/Alert';
-import { PET_SIZES } from '../../utils/format';
+import { PET_SIZES, PET_GENDERS } from '../../utils/format';
 
 /**
  * Formulário reutilizável para criar/editar pet.
@@ -29,6 +29,7 @@ export default function PetForm({
     description: '',
     ageInMonths: '',
     size: 'MEDIUM',
+    gender: 'MALE',
   });
   const [errors, setErrors] = useState({});
 
@@ -44,6 +45,7 @@ export default function PetForm({
             ? String(initialValues.ageInMonths)
             : '',
         size: initialValues.size ?? 'MEDIUM',
+        gender: initialValues.gender ?? 'MALE',
       });
     }
   }, [initialValues]);
@@ -61,6 +63,7 @@ export default function PetForm({
     if (!form.petName.trim()) errs.petName = 'O nome é obrigatório.';
     if (!form.species.trim()) errs.species = 'A espécie é obrigatória.';
     if (!form.size) errs.size = 'Selecione um porte.';
+    if (!form.gender) errs.gender = 'Selecione o sexo.';
     if (form.ageInMonths !== '' && Number.isNaN(Number(form.ageInMonths))) {
       errs.ageInMonths = 'Idade deve ser um número.';
     }
@@ -79,6 +82,7 @@ export default function PetForm({
       ageInMonths:
         form.ageInMonths === '' ? null : Number(form.ageInMonths),
       size: form.size,
+      gender: form.gender,
     };
     onSubmit(payload);
   };
@@ -127,20 +131,41 @@ export default function PetForm({
             {errors.size && <span className="field__error">{errors.size}</span>}
           </div>
         </div>
+
         <div style={{ flex: 1 }}>
-          <Input
-            label="Idade (em meses)"
-            name="ageInMonths"
-            type="number"
-            min="0"
-            placeholder="Ex.: 24"
-            value={form.ageInMonths}
-            onChange={handleChange}
-            error={errors.ageInMonths}
-            hint="Opcional"
-          />
+          <div className="field">
+            <label className="field__label" htmlFor="gender">
+              Sexo *
+            </label>
+            <select
+              id="gender"
+              name="gender"
+              className={`field__control ${errors.gender ? 'field__control--error' : ''}`}
+              value={form.gender}
+              onChange={handleChange}
+            >
+              {PET_GENDERS.map((g) => (
+                <option key={g.value} value={g.value}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
+            {errors.gender && <span className="field__error">{errors.gender}</span>}
+          </div>
         </div>
       </div>
+
+      <Input
+        label="Idade (em meses)"
+        name="ageInMonths"
+        type="number"
+        min="0"
+        placeholder="Ex.: 24"
+        value={form.ageInMonths}
+        onChange={handleChange}
+        error={errors.ageInMonths}
+        hint="Opcional"
+      />
 
       <Input
         label="Descrição"
