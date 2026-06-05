@@ -2,16 +2,18 @@ import client from './client';
 
 /**
  * Endpoints de pets.
- *
- * NOTA DE CONTRATO: o backend aceita um filtro `size` (PetSize), mas o nome
- * colide com o `size` de paginação do Spring. Por isso NÃO enviamos o filtro
- * de porte na query — ele é aplicado no cliente (ver CatalogPage).
  */
 
-/** GET /pets?name=&page= → { content: [PetResponseDTO], pagination } */
-export function getPets({ name, page = 0 } = {}) {
+/** GET /pets?name=&petSize=&species=&minAge=&maxAge=&gender=&sort=&page= → { content: [PetResponseDTO], pagination } */
+export function getPets({ name, petSize, species, minAge, maxAge, gender, sort, page = 0 } = {}) {
   const params = { page };
   if (name && name.trim()) params.name = name.trim();
+  if (petSize) params.petSize = petSize;
+  if (species) params.species = species;
+  if (minAge != null && minAge !== '') params.minAge = minAge;
+  if (maxAge != null && maxAge !== '') params.maxAge = maxAge;
+  if (gender) params.gender = gender;
+  if (sort) params.sort = sort;
   return client.get('/pets', { params }).then((res) => res.data.data);
 }
 
