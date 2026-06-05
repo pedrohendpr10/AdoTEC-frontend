@@ -50,6 +50,13 @@ export function getUnassignedAppointments({ page = 0, size = 5 } = {}) {
     .then((res) => res.data.data);
 }
 
+/** GET /dashboard/metrics → DashboardMetricsDTO (apenas ADMIN) */
+export function getDashboardMetrics() {
+  return client
+    .get('/dashboard/metrics')
+    .then((res) => res.data.data);
+}
+
 /** GET /appointments/{id} → AppointmentResponseDTO  (com checagem de ownership no backend) */
 export function getAppointmentById(id) {
   return client.get(`/appointments/${id}`).then((res) => res.data.data);

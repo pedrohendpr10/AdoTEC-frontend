@@ -6,11 +6,10 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import { getPets } from '../../api/petsApi';
 import {
-  getAllAppointments,
   getMyAppointments,
   getUnassignedAppointments,
+  getDashboardMetrics,
 } from '../../api/appointmentsApi';
-import { getEmployees } from '../../api/employeesApi';
 import { useAuth } from '../../context/AuthContext';
 import { todayISO, formatDate, formatTime, appointmentStatus } from '../../utils/format';
 
@@ -37,42 +36,52 @@ export default function DashboardPage() {
   useEffect(() => {
     async function load() {
       try {
-        // Pets disponíveis (todos podem ver). Apenas a 1ª página é necessária
-        // para pegar o totalElements.
-        const petsPage = await getPets({ page: 0 });
-
-        // Agendamentos: ADMIN vê tudo; EMPLOYEE vê só os atribuídos.
-        const apptPage = isAdmin
-          ? await getAllAppointments({ page: 0, size: 50 })
-          : await getMyAppointments({ page: 0, size: 50 });
-
-        const today = todayISO();
-        const items = apptPage.content ?? [];
-        const pendingToday = items.filter(
-          (a) =>
-            a.status === 'PENDING' && a.timeSlot?.date === today,
-        ).length;
-        const pendingTotal = items.filter((a) => a.status === 'PENDING').length;
-
-        // Funcionários e não atribuídos: apenas ADMIN busca essa informação.
         let employeesTotal = 0;
+        let petsTotal = 0;
+        let appointmentsTotal = 0;
+        let pendingToday = 0;
+        let pendingTotal = 0;
         let unassignedTotal = 0;
         let fetchedUnassignedList = [];
 
         if (isAdmin) {
           try {
-            const empList = await getEmployees();
-            employeesTotal = empList?.length ?? 0;
+            const metrics = await getDashboardMetrics();
+            petsTotal = metrics.petsAvailable;
+            appointmentsTotal = metrics.appointmentsTotal;
+            pendingToday = metrics.pendingToday;
+            pendingTotal = metrics.pendingTotal;
+            employeesTotal = metrics.employeesTotal;
+            unassignedTotal = metrics.unassignedTotal;
+          } catch (err) {
+            console.error('Error fetching dashboard metrics', err);
+          }
 
+          try {
             const unassignedPage = await getUnassignedAppointments({ page: 0, size: 5 });
             fetchedUnassignedList = unassignedPage.content || [];
-            unassignedTotal = unassignedPage.pagination?.totalElements ?? 0;
-          } catch { /* ignora se falhar */ }
+          } catch (err) {
+            console.error('Error fetching unassigned appointments', err);
+          }
+        } else {
+          // Fallback for EMPLOYEE (non-admin)
+          const petsPage = await getPets({ page: 0 });
+          petsTotal = petsPage.pagination?.totalElements ?? 0;
+
+          const apptPage = await getMyAppointments({ page: 0, size: 50 });
+          appointmentsTotal = apptPage.pagination?.totalElements ?? 0;
+
+          const today = todayISO();
+          const items = apptPage.content ?? [];
+          pendingToday = items.filter(
+            (a) => a.status === 'PENDING' && a.timeSlot?.date === today,
+          ).length;
+          pendingTotal = items.filter((a) => a.status === 'PENDING').length;
         }
 
         setStats({
-          petsTotal: petsPage.pagination?.totalElements ?? 0,
-          appointmentsTotal: apptPage.pagination?.totalElements ?? 0,
+          petsTotal,
+          appointmentsTotal,
           pendingToday,
           pendingTotal,
           employeesTotal,
@@ -170,6 +179,7 @@ export default function DashboardPage() {
                     <th>Data / hora</th>
                     <th>Pet</th>
                     <th>Adotante</th>
+                    <th>Funcionário</th>
                     <th>Status</th>
                     <th></th>
                   </tr>
@@ -188,16 +198,16 @@ export default function DashboardPage() {
                           </span>
                         </td>
                         <td>
-                          <span style={{ color: 'var(--color-warning)', marginRight: '6px' }}></span>
                           {appt.petName}
                         </td>
                         <td>{appt.adopterName}</td>
                         <td>
-                          <Badge variant={status.variant}>{status.label}</Badge>
-                          <br />
                           <span className="muted" style={{ fontSize: 'var(--font-size-xs)' }}>
                             Não atribuído
                           </span>
+                        </td>
+                        <td>
+                          <Badge variant={status.variant}>{status.label}</Badge>
                         </td>
                         <td>
                           <div className="data-table__actions">
