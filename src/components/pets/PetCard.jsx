@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
-import { petSizeLabel, formatAge, primaryPhotoUrl } from '../../utils/format';
+import { petSizeLabel, formatAge, primaryPhotoUrl, petGenderLabel } from '../../utils/format';
 
 /** Cartão de pet exibido no catálogo e na home. */
 export default function PetCard({ pet }) {
@@ -30,7 +30,7 @@ export default function PetCard({ pet }) {
       <div className="pet-card__body">
         <h3 className="pet-card__name">{pet.petName}</h3>
         <p className="pet-card__meta">
-          {pet.species} · {formatAge(pet.ageInMonths)}
+          {pet.species} · {petGenderLabel(pet.gender)} · {formatAge(pet.ageInMonths)}
         </p>
         <div className="pet-card__footer">
           <Link to={`/pets/${pet.petId}`}>

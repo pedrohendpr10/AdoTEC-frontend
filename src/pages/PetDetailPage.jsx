@@ -8,7 +8,7 @@ import EmptyState from '../components/ui/EmptyState';
 import ScheduleModal from '../components/pets/ScheduleModal';
 import { getPetById } from '../api/petsApi';
 import { parseApiError } from '../api/errors';
-import { petSizeLabel, formatAge } from '../utils/format';
+import { petSizeLabel, formatAge, petGenderLabel } from '../utils/format';
 import { useAuth } from '../context/AuthContext';
 
 /** Página de detalhe de um pet, com galeria de fotos e agendamento de visita. */
@@ -129,6 +129,10 @@ export default function PetDetailPage() {
               <li>
                 <span>Porte</span>
                 <span>{petSizeLabel(pet.size)}</span>
+              </li>
+              <li>
+                <span>Sexo</span>
+                <span>{petGenderLabel(pet.gender)}</span>
               </li>
               <li>
                 <span>Idade</span>
